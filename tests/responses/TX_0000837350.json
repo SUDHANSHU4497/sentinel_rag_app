@@ -1,0 +1,97 @@
+{
+  "transaction_id": "TX_0000837350",
+  "as_of": "2025-11-10T06:39:01.983+00:00",
+  "risk_summary": "The transaction is a UPI payment of a modest amount (230.28 INR) to a healthcare merchant located 1650 km away from the customer's home city, Guwahati. The main concern is the geographical distance triggering the R02_GEO_MISMATCH reason code. However, the customer's device is recognized and linked only to this customer, with no known fraud associated. The risk score is low, and the payment history and device usage indicate normal behavior without suspicious velocity or failures.",
+  "risk_level": "LOW",
+  "reason_codes": [
+    {
+      "code": "R02_GEO_MISMATCH",
+      "description": "Unusual observed city or customer to merchant distance above 500 km",
+      "evidence": "customer to merchant distance is 1650.81 km, which is above the 500 km threshold for unusual location"
+    }
+  ],
+  "graph_findings": "The device used is a browser device seen only with this customer in the last 90 days, with no other customers or known fraud linked. The customer has 12 payments over 90 days with no known fraud and a history of using 2 devices and 9 merchants.",
+  "recommended_action": {
+    "action": "ALLOW",
+    "rationale": "The fraud score is 0.010952, well below the medium threshold of 0.3 (DOC_regulatory_exercises_0000799::2). The geographic distance alone does not justify blocking or review, especially since the device and customer history show no fraud signals (DOC_regulatory_exercises_0000342::0).",
+    "llm_action": "ALLOW",
+    "policy_action": "ALLOW",
+    "score": 0.010952,
+    "hard_rules_fired": [],
+    "overridden_by_policy": false
+  },
+  "cited_sources": [
+    {
+      "document_id": "DOC_regulatory_exercises_0000342",
+      "document_title": "Synthetic NPCI topic exercise 0342 on location change",
+      "document_type": "regulatory_exercises",
+      "source_body": "NPCI",
+      "chunk_id": "DOC_regulatory_exercises_0000342::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.7098,
+      "used_for": "Contextualizing the geographic distance and advising not to block solely for city mismatch",
+      "text": "Purpose:\nTeach evidence-based review of location change for a fictional quick_commerce merchant. This exercise uses net_banking activity associated with Bengaluru; scenario variant 342. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Compare city novelty with distance and ordinary travel. Do not block solely because customer and merchant cities differ."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000799",
+      "document_title": "Synthetic RBI topic exercise 0799 on access review",
+      "document_type": "regulatory_exercises",
+      "source_body": "RBI",
+      "chunk_id": "DOC_regulatory_exercises_0000799::2",
+      "chunk_number": 2,
+      "retrieval_score": 0.7672,
+      "used_for": "Fraud score cutoffs guiding the action threshold",
+      "text": "Teaching policy:\nThe project starts with probability cutoffs 0.30, 0.60 and 0.85. Below 0.60 the policy allows the payment; from 0.60 to below 0.85 it requests review; at or above 0.85 it blocks. A blocklisted device takes precedence over a customer allowlist. These are client-provided starting settings, not a regulatory standard."
+    }
+  ],
+  "retrieved_chunks": [
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000342::0",
+      "score": 0.7098,
+      "matched_query": "how to review a location change or a large customer to merchant distance"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000799::2",
+      "score": 0.7672,
+      "matched_query": "what are the probability cutoffs for allow, review and block and does a blocklist take precedence"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000502::0",
+      "score": 0.7064,
+      "matched_query": "how to review a location change or a large customer to merchant distance"
+    },
+    {
+      "chunk_id": "DOC_rba_guides_0000001::0",
+      "score": 0.6403,
+      "matched_query": "what are the probability cutoffs for allow, review and block and does a blocklist take precedence"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000202::0",
+      "score": 0.7047,
+      "matched_query": "how to review a location change or a large customer to merchant distance"
+    }
+  ],
+  "warnings": [],
+  "meta": {
+    "stores": {
+      "transaction": "mongodb",
+      "graph": "neo4j",
+      "policy": "qdrant:sentinel_docs"
+    },
+    "llm": "euron:gpt-4.1-mini",
+    "embedding_model": "gemini-embedding-2",
+    "usage": {
+      "prompt_tokens": 2127,
+      "completion_tokens": 406,
+      "total_tokens": 2533
+    },
+    "latency_ms": {
+      "transaction": 2,
+      "graph": 24,
+      "retrieval": 1683,
+      "llm": 4250,
+      "total": 5959
+    },
+    "generated_at": "2026-11-10T11:11:30+00:00"
+  }
+}

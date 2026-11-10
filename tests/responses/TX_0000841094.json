@@ -1,0 +1,145 @@
+{
+  "transaction_id": "TX_0000841094",
+  "as_of": "2025-11-11T19:55:12.636+00:00",
+  "risk_summary": "The transaction shows multiple risk signals: the payment amount is nearly nine times the customer's average, it was made at night, and the merchant is in a high-risk gaming category. However, the customer's device is familiar, and the customer has a history of similar transactions without known fraud. The large distance between the customer's current city and the merchant's location is noted but not unusual given the customer's home city and past activity.",
+  "risk_level": "LOW",
+  "reason_codes": [
+    {
+      "code": "R02_GEO_MISMATCH",
+      "description": "Unusual observed city or customer to merchant distance above 500 km",
+      "evidence": "customer to merchant distance is 1305.29 km, with customer location Ahmedabad and merchant in Patna, the customer's home city"
+    },
+    {
+      "code": "R03_ODD_HOUR",
+      "description": "Authorisation requested between midnight and 05:00 IST",
+      "evidence": "transaction time is 01:25 IST, between midnight and 05:00 IST"
+    },
+    {
+      "code": "R05_AMOUNT_SPIKE",
+      "description": "Amount is at least five times the observed 90 day average",
+      "evidence": "transaction amount INR 5985.01 is 8.8 times the 90-day average INR 679.52"
+    },
+    {
+      "code": "R08_HIGH_RISK_MCC",
+      "description": "Elevated category flag (gaming, gift_cards or electronics) under the synthetic teaching policy",
+      "evidence": "merchant category is gaming, flagged as elevated risk"
+    }
+  ],
+  "graph_findings": "The device is only used by this customer in the last 90 days with no known fraud linked to it. The customer has 10 payments in 90 days with no known fraud, and the merchant has 1 known fraud in the same period.",
+  "recommended_action": {
+    "action": "ALLOW",
+    "rationale": "The risk score is 0.103915, well below the medium threshold of 0.3, so policy dictates ALLOW (DOC_regulatory_exercises_0000799::2). The device and customer neighborhood show no known fraud associations, supporting a low risk (DOC_regulatory_exercises_0000831::0). The reason codes indicate contextual risks but not conclusive fraud evidence (DOC_regulatory_exercises_0000342::0, DOC_regulatory_exercises_0000388::0, DOC_regulatory_exercises_0000044::0).",
+    "llm_action": "ALLOW",
+    "policy_action": "ALLOW",
+    "score": 0.103915,
+    "hard_rules_fired": [],
+    "overridden_by_policy": false
+  },
+  "cited_sources": [
+    {
+      "document_id": "DOC_regulatory_exercises_0000799",
+      "document_title": "Synthetic RBI topic exercise 0799 on access review",
+      "document_type": "regulatory_exercises",
+      "source_body": "RBI",
+      "chunk_id": "DOC_regulatory_exercises_0000799::2",
+      "chunk_number": 2,
+      "retrieval_score": 0.7672,
+      "used_for": "cutoff thresholds for decision making",
+      "text": "Teaching policy:\nThe project starts with probability cutoffs 0.30, 0.60 and 0.85. Below 0.60 the policy allows the payment; from 0.60 to below 0.85 it requests review; at or above 0.85 it blocks. A blocklisted device takes precedence over a customer allowlist. These are client-provided starting settings, not a regulatory standard."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000831",
+      "document_title": "Synthetic RBI topic exercise 0831 on risk explanations",
+      "document_type": "regulatory_exercises",
+      "source_body": "RBI",
+      "chunk_id": "DOC_regulatory_exercises_0000831::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.6992,
+      "used_for": "reminder to base risk assessment only on provided facts and graph findings",
+      "text": "Purpose:\nTeach evidence-based review of risk explanations for a fictional food merchant. This exercise uses net_banking activity associated with Kolkata; scenario variant 831. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Every stated fact must occur in the saved input or feature snapshot. Remove unsupported allegations."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000342",
+      "document_title": "Synthetic NPCI topic exercise 0342 on location change",
+      "document_type": "regulatory_exercises",
+      "source_body": "NPCI",
+      "chunk_id": "DOC_regulatory_exercises_0000342::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.7098,
+      "used_for": "context on location mismatch and not blocking solely for city difference",
+      "text": "Purpose:\nTeach evidence-based review of location change for a fictional quick_commerce merchant. This exercise uses net_banking activity associated with Bengaluru; scenario variant 342. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Compare city novelty with distance and ordinary travel. Do not block solely because customer and merchant cities differ."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000388",
+      "document_title": "Synthetic NPCI topic exercise 0388 on night activity",
+      "document_type": "regulatory_exercises",
+      "source_body": "NPCI",
+      "chunk_id": "DOC_regulatory_exercises_0000388::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.7556,
+      "used_for": "night activity is contextual evidence, not proof of fraud",
+      "text": "Purpose:\nTeach evidence-based review of night activity for a fictional other merchant. This exercise uses net_banking activity associated with Jaipur; scenario variant 388. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Derive the hour in IST from an offset-aware timestamp. Night activity is contextual evidence, not proof."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000044",
+      "document_title": "Synthetic NPCI topic exercise 0044 on amount context",
+      "document_type": "regulatory_exercises",
+      "source_body": "NPCI",
+      "chunk_id": "DOC_regulatory_exercises_0000044::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.7108,
+      "used_for": "amount spike context compared to 90-day average",
+      "text": "Purpose:\nTeach evidence-based review of amount context for a fictional education merchant. This exercise uses net_banking activity associated with Kolkata; scenario variant 44. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Compare spending with the preceding 90 day mean. Use an explicit cold-start flag when there is no history."
+    }
+  ],
+  "retrieved_chunks": [
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000342::0",
+      "score": 0.7098,
+      "matched_query": "how to review a location change or a large customer to merchant distance"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000388::0",
+      "score": 0.7556,
+      "matched_query": "is a payment between midnight and 05:00 IST proof of fraud, and how is the hour derived"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000044::0",
+      "score": 0.7108,
+      "matched_query": "amount much higher than the customer's 90 day average spending, or no history"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000831::0",
+      "score": 0.6992,
+      "matched_query": "how to write a risk explanation for a high risk merchant category using only facts from the saved input"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000799::2",
+      "score": 0.7672,
+      "matched_query": "what are the probability cutoffs for allow, review and block and does a blocklist take precedence"
+    }
+  ],
+  "warnings": [],
+  "meta": {
+    "stores": {
+      "transaction": "mongodb",
+      "graph": "neo4j",
+      "policy": "qdrant:sentinel_docs"
+    },
+    "llm": "euron:gpt-4.1-mini",
+    "embedding_model": "gemini-embedding-2",
+    "usage": {
+      "prompt_tokens": 2328,
+      "completion_tokens": 668,
+      "total_tokens": 2996
+    },
+    "latency_ms": {
+      "transaction": 8,
+      "graph": 27,
+      "retrieval": 1653,
+      "llm": 5571,
+      "total": 7259
+    },
+    "generated_at": "2026-11-10T11:11:17+00:00"
+  }
+}

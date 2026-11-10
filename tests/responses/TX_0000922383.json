@@ -1,0 +1,102 @@
+{
+  "transaction_id": "TX_0000922383",
+  "as_of": "2025-12-16T03:41:00.975+00:00",
+  "risk_summary": "The transaction is a card payment of INR 7513.51 to an electronics merchant in Kochi, while the customer is based in Delhi. The reason codes indicate a geographic mismatch due to a large distance between customer and merchant (2079 km) and that electronics is a higher risk merchant category. However, the device is not new, the customer has a low number of recent transactions, and there are no known fraud links to the device or customer in the graph. The payment score is low, and the policy allows the transaction.",
+  "risk_level": "LOW",
+  "reason_codes": [
+    {
+      "code": "R02_GEO_MISMATCH",
+      "description": "Unusual observed city or customer to merchant distance above 500 km",
+      "evidence": "customer_merchant_distance_km is 2079.43 km, above the 500 km threshold"
+    },
+    {
+      "code": "R08_HIGH_RISK_MCC",
+      "description": "Elevated category flag (gaming, gift_cards or electronics) under the synthetic teaching policy",
+      "evidence": "merchant_category is electronics, a flagged category under synthetic teaching policy"
+    }
+  ],
+  "graph_findings": "The device is used only by this customer in the last 90 days, with no known fraud on device or customer. The customer has 5 payments in 90 days with no known fraud. The merchant has no known fraud in 90 days.",
+  "recommended_action": {
+    "action": "ALLOW",
+    "rationale": "The risk score is 0.020432, which is below the medium cutoff of 0.3, and no hard rules fired (DOC_regulatory_exercises_0000799::2). Geographic mismatch alone does not warrant blocking as per guidance not to block solely due to city difference (DOC_regulatory_exercises_0000342::0). No fraud evidence in the graph supports allowing the transaction.",
+    "llm_action": "ALLOW",
+    "policy_action": "ALLOW",
+    "score": 0.020432,
+    "hard_rules_fired": [],
+    "overridden_by_policy": false
+  },
+  "cited_sources": [
+    {
+      "document_id": "DOC_regulatory_exercises_0000799",
+      "document_title": "Synthetic RBI topic exercise 0799 on access review",
+      "document_type": "regulatory_exercises",
+      "source_body": "RBI",
+      "chunk_id": "DOC_regulatory_exercises_0000799::2",
+      "chunk_number": 2,
+      "retrieval_score": 0.7672,
+      "used_for": "score cutoffs and policy action",
+      "text": "Teaching policy:\nThe project starts with probability cutoffs 0.30, 0.60 and 0.85. Below 0.60 the policy allows the payment; from 0.60 to below 0.85 it requests review; at or above 0.85 it blocks. A blocklisted device takes precedence over a customer allowlist. These are client-provided starting settings, not a regulatory standard."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000342",
+      "document_title": "Synthetic NPCI topic exercise 0342 on location change",
+      "document_type": "regulatory_exercises",
+      "source_body": "NPCI",
+      "chunk_id": "DOC_regulatory_exercises_0000342::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.7098,
+      "used_for": "context about location change and not blocking solely for city mismatch",
+      "text": "Purpose:\nTeach evidence-based review of location change for a fictional quick_commerce merchant. This exercise uses net_banking activity associated with Bengaluru; scenario variant 342. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Compare city novelty with distance and ordinary travel. Do not block solely because customer and merchant cities differ."
+    }
+  ],
+  "retrieved_chunks": [
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000342::0",
+      "score": 0.7098,
+      "matched_query": "how to review a location change or a large customer to merchant distance"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000831::0",
+      "score": 0.6992,
+      "matched_query": "how to write a risk explanation for a high risk merchant category using only facts from the saved input"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000799::2",
+      "score": 0.7672,
+      "matched_query": "what are the probability cutoffs for allow, review and block and does a blocklist take precedence"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000502::0",
+      "score": 0.7064,
+      "matched_query": "how to review a location change or a large customer to merchant distance"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000851::0",
+      "score": 0.6966,
+      "matched_query": "how to write a risk explanation for a high risk merchant category using only facts from the saved input"
+    }
+  ],
+  "warnings": [],
+  "meta": {
+    "stores": {
+      "transaction": "mongodb",
+      "graph": "neo4j",
+      "policy": "qdrant:sentinel_docs"
+    },
+    "llm": "euron:gpt-4.1-mini",
+    "embedding_model": "gemini-embedding-2",
+    "usage": {
+      "prompt_tokens": 2162,
+      "completion_tokens": 449,
+      "total_tokens": 2611
+    },
+    "latency_ms": {
+      "transaction": 2,
+      "graph": 23,
+      "retrieval": 2639,
+      "llm": 4091,
+      "total": 6755
+    },
+    "generated_at": "2026-11-10T11:11:24+00:00"
+  }
+}

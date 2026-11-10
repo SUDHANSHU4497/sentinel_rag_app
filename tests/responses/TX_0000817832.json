@@ -1,0 +1,134 @@
+{
+  "transaction_id": "TX_0000817832",
+  "as_of": "2025-11-01T20:41:21.421+00:00",
+  "risk_summary": "The transaction is a net banking payment of INR 2235.86 in the electronics category, conducted at 2:11 AM IST, which is an unusual hour. The customer is located in Chennai but the merchant is in Delhi, a large distance of over 1755 km, triggering a geo mismatch. The device is not new and has only one customer, with no known fraud history. Although there are recent failed attempts, the overall risk score is low and no hard rules fired, suggesting the activity is unusual but not strongly suspicious given past patterns.",
+  "risk_level": "LOW",
+  "reason_codes": [
+    {
+      "code": "R02_GEO_MISMATCH",
+      "description": "Unusual observed city or customer to merchant distance above 500 km",
+      "evidence": "Customer location Chennai and merchant location Delhi with a distance of 1755.64 km, exceeding 500 km threshold"
+    },
+    {
+      "code": "R03_ODD_HOUR",
+      "description": "Authorisation requested between midnight and 05:00 IST",
+      "evidence": "Transaction time at 2:11 AM IST, between midnight and 5:00 AM"
+    },
+    {
+      "code": "R04_FAILED_ATTEMPTS",
+      "description": "At least three failed payment outcomes observed in the preceding 24 hours",
+      "evidence": "Three failed payment outcomes observed in the last 24 hours"
+    },
+    {
+      "code": "R08_HIGH_RISK_MCC",
+      "description": "Elevated category flag (gaming, gift_cards or electronics) under the synthetic teaching policy",
+      "evidence": "Merchant category electronics has an elevated risk flag"
+    }
+  ],
+  "graph_findings": "The device is used only by this customer with no known fraud linked to it, and the customer has a modest transaction history with no prior fraud. The merchant also has no known fraud in recent activity.",
+  "recommended_action": {
+    "action": "ALLOW",
+    "rationale": "The risk score is 0.133, which is below the medium cutoff of 0.3, and no hard rules fired, so policy dictates allow (DOC_regulatory_exercises_0000799::2). The geo mismatch and night hour flags are contextual signals but not definitive proof of fraud (DOC_regulatory_exercises_0000342::0 and DOC_regulatory_exercises_0000388::0). The failed attempts and high-risk MCC should be noted but do not elevate risk beyond the threshold.",
+    "llm_action": "ALLOW",
+    "policy_action": "ALLOW",
+    "score": 0.133091,
+    "hard_rules_fired": [],
+    "overridden_by_policy": false
+  },
+  "cited_sources": [
+    {
+      "document_id": "DOC_regulatory_exercises_0000342",
+      "document_title": "Synthetic NPCI topic exercise 0342 on location change",
+      "document_type": "regulatory_exercises",
+      "source_body": "NPCI",
+      "chunk_id": "DOC_regulatory_exercises_0000342::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.7098,
+      "used_for": "Contextual explanation of location mismatch signals and their interpretation",
+      "text": "Purpose:\nTeach evidence-based review of location change for a fictional quick_commerce merchant. This exercise uses net_banking activity associated with Bengaluru; scenario variant 342. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Compare city novelty with distance and ordinary travel. Do not block solely because customer and merchant cities differ."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000388",
+      "document_title": "Synthetic NPCI topic exercise 0388 on night activity",
+      "document_type": "regulatory_exercises",
+      "source_body": "NPCI",
+      "chunk_id": "DOC_regulatory_exercises_0000388::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.7556,
+      "used_for": "Contextual explanation of night activity as a risk factor",
+      "text": "Purpose:\nTeach evidence-based review of night activity for a fictional other merchant. This exercise uses net_banking activity associated with Jaipur; scenario variant 388. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Derive the hour in IST from an offset-aware timestamp. Night activity is contextual evidence, not proof."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000703",
+      "document_title": "Synthetic RBI topic exercise 0703 on payment retries",
+      "document_type": "regulatory_exercises",
+      "source_body": "RBI",
+      "chunk_id": "DOC_regulatory_exercises_0000703::0",
+      "chunk_number": 0,
+      "retrieval_score": 0.7102,
+      "used_for": "Interpretation of failed attempts as context but not sole proof",
+      "text": "Purpose:\nTeach evidence-based review of payment retries for a fictional gaming merchant. This exercise uses net_banking activity associated with Hyderabad; scenario variant 703. The exercise is part of a synthetic corpus, with no official status.\n\nContext:\nA payment arrives with incomplete history and an apparent contextual change. The reviewer must compare the current event with past observations. Count only failed outcomes received before this authorisation. A future decline cannot explain an earlier decision."
+    },
+    {
+      "document_id": "DOC_regulatory_exercises_0000799",
+      "document_title": "Synthetic RBI topic exercise 0799 on access review",
+      "document_type": "regulatory_exercises",
+      "source_body": "RBI",
+      "chunk_id": "DOC_regulatory_exercises_0000799::2",
+      "chunk_number": 2,
+      "retrieval_score": 0.7672,
+      "used_for": "Policy cutoffs and decision thresholds based on risk score and hard rules",
+      "text": "Teaching policy:\nThe project starts with probability cutoffs 0.30, 0.60 and 0.85. Below 0.60 the policy allows the payment; from 0.60 to below 0.85 it requests review; at or above 0.85 it blocks. A blocklisted device takes precedence over a customer allowlist. These are client-provided starting settings, not a regulatory standard."
+    }
+  ],
+  "retrieved_chunks": [
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000342::0",
+      "score": 0.7098,
+      "matched_query": "how to review a location change or a large customer to merchant distance"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000388::0",
+      "score": 0.7556,
+      "matched_query": "is a payment between midnight and 05:00 IST proof of fraud, and how is the hour derived"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000703::0",
+      "score": 0.7102,
+      "matched_query": "which failed payment outcomes count as retries before this authorisation"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000831::0",
+      "score": 0.6992,
+      "matched_query": "how to write a risk explanation for a high risk merchant category using only facts from the saved input"
+    },
+    {
+      "chunk_id": "DOC_regulatory_exercises_0000799::2",
+      "score": 0.7672,
+      "matched_query": "what are the probability cutoffs for allow, review and block and does a blocklist take precedence"
+    }
+  ],
+  "warnings": [],
+  "meta": {
+    "stores": {
+      "transaction": "mongodb",
+      "graph": "neo4j",
+      "policy": "qdrant:sentinel_docs"
+    },
+    "llm": "euron:gpt-4.1-mini",
+    "embedding_model": "gemini-embedding-2",
+    "usage": {
+      "prompt_tokens": 2336,
+      "completion_tokens": 624,
+      "total_tokens": 2960
+    },
+    "latency_ms": {
+      "transaction": 2,
+      "graph": 30,
+      "retrieval": 2860,
+      "llm": 5062,
+      "total": 7955
+    },
+    "generated_at": "2026-11-10T11:11:02+00:00"
+  }
+}
