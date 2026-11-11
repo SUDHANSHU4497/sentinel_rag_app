@@ -11,10 +11,24 @@ It reuses the earlier tasks: the MongoDB documents from task 1, the Neo4j graph 
 
 **Results in one line:** all 10 test calls returned valid JSON with citations and no hallucinated codes or chunks; retrieval **hit@5 is 100%** on 10 questions with a known answer document (70% when the case notes are searched too).
 
+## Where each requirement is
+
+| # | Requirement | Code | Evidence in this repo |
+|---|---|---|---|
+| 1 | FastAPI service with `POST /explain {transaction_id}` | [`api.py`](api.py) | [Swagger call](screenshots/step3_swagger_response.png), [health check](screenshots/step1_health.png) |
+| 2 | Reads transaction + features (MongoDB or Supabase), device and customer neighbourhood (Neo4j), policy chunks (Qdrant + Gemini Embedding 2) | [`stores.py`](stores.py), [`embeddings.py`](embeddings.py), [`settings.py`](settings.py), loaders [`load_mongo.py`](load_mongo.py), [`load_neo4j.py`](load_neo4j.py), [`build_policy_index.py`](build_policy_index.py) | [Qdrant collection](screenshots/step7_qdrant_collection.png), `/health` lists all three stores |
+| 3 | LLM returns JSON: risk summary, reason codes, recommended action, cited sources (document and chunk) | [`llm.py`](llm.py) + guardrails in [`api.py`](api.py) | [a saved response](screenshots/step5_saved_response.png) |
+| 4 | 10 test transactions (5 fraud, 5 genuine, validation split), responses saved | [`run_tests.py`](run_tests.py) | [`tests/responses/`](tests/responses), [`tests/summary.md`](tests/summary.md), [screenshot](screenshots/step4_test_summary.png) |
+| 5 | 10 questions with a known answer document, retrieval hit@5 | [`eval_retrieval.py`](eval_retrieval.py) | [`outputs/retrieval_report.md`](outputs/retrieval_report.md), [`outputs/retrieval_eval.csv`](outputs/retrieval_eval.csv), [screenshot](screenshots/step6_retrieval_hit_at_5.png) |
+| 6 | One-page architecture diagram: which database stores what, and why | [`architecture.svg`](architecture.svg) | [`architecture.png`](architecture.png), shown below |
+| | Setup and safe configuration | [`requirements.txt`](requirements.txt), [`.env.example`](.env.example), [`docker-compose.yml`](docker-compose.yml), [`.gitignore`](.gitignore) | [Setup](#setup) below; no key is in the code or outputs |
+| | Everything in one run, with outputs | [`sentinel_rag_app.ipynb`](sentinel_rag_app.ipynb) | health check, a live `/explain` call, a 404, the 10 saved responses, hit@5 rerun, diagram |
+
 ## Files
 
 | File | What it is |
 |---|---|
+| `sentinel_rag_app.ipynb` | The notebook: runs the API in-process, one live call, the saved tests and the hit@5 eval, with outputs |
 | `api.py` | The FastAPI service: `POST /explain`, `GET /health` |
 | `stores.py` | The three data sources: MongoDB or Supabase, Neo4j, Qdrant |
 | `llm.py` | The prompt and the LLM call (Euron EURI gateway or Google Gemini API), JSON out |
@@ -30,6 +44,7 @@ It reuses the earlier tasks: the MongoDB documents from task 1, the Neo4j graph 
 | `outputs/policy_chunks.csv` | Every chunk in the Qdrant collection, without vectors |
 | `settings.py`, `tables.py` | Settings from `.env`; reading the SENTINEL tables from the folder or the zip |
 | `architecture.png`, `architecture.svg` | The one-page architecture diagram |
+| `screenshots/` | Output of each step from a real run (shown below) |
 | `docker-compose.yml` | MongoDB, Neo4j and Qdrant on your laptop (instead of Atlas, Aura and Qdrant Cloud) |
 | `requirements.txt`, `.env.example`, `.gitignore` | Packages, settings template, keeps `.env` out of git |
 
@@ -78,6 +93,7 @@ The source is `architecture.svg` (edit it in any text editor or Inkscape and re-
    python run_tests.py             # the 10 test transactions -> tests/
    python eval_retrieval.py        # hit@5 -> outputs/retrieval_report.md
    ```
+7. Or, instead of 5 and 6, open `sentinel_rag_app.ipynb` and click **Run All**: it runs the API in-process (no uvicorn needed), makes a live call, shows the saved tests and reruns the hit@5 eval.
 
 Example call (PowerShell: `Invoke-RestMethod`; or the Swagger page):
 ```
@@ -171,6 +187,33 @@ Add `"include_context": true` to also get the full context that was sent to the 
 | 10 | Besides the risk itself, what should a risk assessment record, for example controls and confidence? | RBA guide 0001 | 1 | 1 |
 
 **What the misses show.** Without the filter, the 100 case notes take the top 5 for questions 4, 5 and 7: they mention cities, distances, failed outcomes and the 60-day label in every note, so they look similar to the question even though they hold no rule. That is why `/explain` filters on `document_type` before searching (a payload filter, task 4 step 5). For question 7 the splits guide comes first ("All labels are mature at the May 2026 snapshot"). It is related but does not hold the rule "treat a label as available sixty days after the transaction", which is in exercise 0556, so only rank 3 counts as the hit.
+
+---
+
+## Screenshots
+
+From a real run (local Docker MongoDB, Neo4j and Qdrant; Gemini Embedding 2 and gpt-4.1-mini through Euron).
+
+**1. Health check:** the API reaches all three stores.
+![Health](screenshots/step1_health.png)
+
+**2. Swagger UI request** (`uvicorn api:app --port 8000`, then http://127.0.0.1:8000/docs)
+![Request](screenshots/step2_swagger_request.png)
+
+**3. Swagger UI response** for TX_0000874973 (fraud, score 0.604 so REVIEW)
+![Response](screenshots/step3_swagger_response.png)
+
+**4. The 10 test transactions** (`python run_tests.py`)
+![Tests](screenshots/step4_test_summary.png)
+
+**5. One saved response**: TX_0000933774, blocked by the device blocklist
+![Saved response](screenshots/step5_saved_response.png)
+
+**6. Retrieval hit@5** (`python eval_retrieval.py`)
+![hit@5](screenshots/step6_retrieval_hit_at_5.png)
+
+**7. The Qdrant collection** `sentinel_docs` with its payload (dashboard at http://localhost:6333/dashboard)
+![Qdrant](screenshots/step7_qdrant_collection.png)
 
 ---
 
