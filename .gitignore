@@ -2,3 +2,4 @@
 __pycache__/
 outputs/embedding_cache.jsonl
 .ipynb_checkpoints/
+sentinel_explain

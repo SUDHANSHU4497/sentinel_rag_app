@@ -46,7 +46,7 @@ def stores():
 
 
 class ExplainRequest(BaseModel):
-    transaction_id: str = Field(..., examples=["TX_0000817832"])  # an ID from the loaded validation split
+    transaction_id: str = Field(..., examples=["TX_0000987651"])
     include_context: bool = Field(False, description="also return the full context sent to the LLM")
 
 
